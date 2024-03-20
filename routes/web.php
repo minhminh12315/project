@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 
 
 /*
@@ -17,15 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[HomeController::class, 'homepage']);
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-route::get('/home',[HomeController::class,'index']);
+route::get('/home',[HomeController::class,'index'])->
+    middleware('auth')->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,3 +32,15 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/post_page',[AdminController::class,'post_page']);
+
+Route::post('/add_post',[AdminController::class,'add_post']);
+
+Route::get('/show_post',[AdminController::class,'show_post']);
+
+Route::get('/delete_post/{id}',[AdminController::class,'delete_post']);
+
+Route::get('/edit_page/{id}',[AdminController::class,'edit_page']);
+
+Route::post('/update_post/{id}',[AdminController::class,'update_post']);
